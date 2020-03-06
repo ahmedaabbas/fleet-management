@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Bus extends Model
+class Seat extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,10 +12,11 @@ class Bus extends Model
      * @var array
      */
     protected $fillable = [
-        'numbers'
+        'number', 'bus_id'
     ];
-    public function seats()
+
+    public function bus()
     {
-        return $this->hasMany(Seat::class);
+        return $this->belongsTo(Bus::class);
     }
 }
