@@ -18,6 +18,7 @@ class AuthController extends Controller
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'password' => bcrypt($validatedData['password']),
+            'role' => 'user'
         ]);
         auth()->login($user);
         $token = $user->createToken('login token')->accessToken;

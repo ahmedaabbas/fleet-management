@@ -17,5 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+// auth routes
 Route::post('/auth/register', 'AuthController@register');
 Route::post('/auth/login', 'AuthController@login');
+//stations routes
+Route::group(['middleware'=>'auth:api'], function() {
+    Route::post('/stations/create', 'StationsController@create');
+    Route::post('/stations/update', 'StationsController@update');
+    Route::post('/stations/delete', 'StationsController@delete');
+});
