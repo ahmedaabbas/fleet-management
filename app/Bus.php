@@ -13,4 +13,10 @@ class Bus extends Model
     {
         return $this->hasMany(Seat::class);
     }
+    public function createSeats()
+    {
+        return $this->seats()->createMany(array_map(function($number) {
+                return ['number' => $number];
+            }, range(1,12)));
+    }
 }

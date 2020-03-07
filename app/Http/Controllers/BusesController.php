@@ -14,9 +14,7 @@ class BusesController extends Controller
             $bus = Bus::create([
                 'numbers' => $data['numbers']
             ]);
-            $bus->seats()->createMany(array_map(function($number) {
-                return ['number' => $number];
-            }, range(1,12)));
+            $bus->createSeats();
             return $bus;
         }
         return response()->json(['error' => 'you dont have permission to create a bus'], 401);
