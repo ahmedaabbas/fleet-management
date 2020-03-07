@@ -26,4 +26,5 @@ Route::group(['middleware'=>'auth:api'], function() {
     Route::post('/stations/update', 'StationsController@update');
     Route::post('/stations/delete', 'StationsController@delete');
     Route::post('/buses/create', 'BusesController@create');
+    Route::post('/trips/create', 'TripsController@create');
 });

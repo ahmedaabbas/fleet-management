@@ -6,12 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Station extends Model
 {
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'name'
     ];
+    public function trips()
+    {
+         return $this->belongsToMany('App\Trip', 'stations_trips');
+    }
 }
