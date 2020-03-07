@@ -3,7 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Seat;
 class Bus extends Model
 {
     protected $fillable = [

@@ -11,6 +11,6 @@ class Station extends Model
     ];
     public function trips()
     {
-         return $this->belongsToMany('App\Trip', 'stations_trips');
+         return $this->belongsToMany(Trip::class)->withPivot('trip_id', 'order');
     }
 }

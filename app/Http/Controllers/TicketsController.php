@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Trip;
 use App\StationTrip;
 use App\Ticket;
+use App\Seat;
 class TicketsController extends Controller
 {
     public function lookForTickets($departureStation, $arrivalStation)
@@ -25,11 +26,12 @@ class TicketsController extends Controller
             } 
             return $departureOrder < $arrivalOrder;
         });
+        $seats = [];
         foreach($array as $trip) {
-            $seats = $trip->bus()->seats();
-            $tickets = $trip->tickets();
+            $newSeats = $trip->avaliableSeats($departureStation, $arrivalStation);
+            $seats = array_merge($seats, json_decode($newSeats, true));
         }
-        return $array;
+        return $seats;
     }
     public function bookTicket(Request $request)
     {
@@ -39,6 +41,9 @@ class TicketsController extends Controller
             'departure_station' => 'required', 
             'arrival_station' => 'required'
         ]);
+        if(!Seat::find($data['seat_id'])->checkSeat($data['departure_station'], $data['arrival_station'], $data['trip_id'])) {
+            return response()->json(['error' => 'there is no seats avaliable'], 500);
+        }
         $data['user_id'] = auth()->user()->id;
         $ticket = Ticket::create($data);
         return $ticket;
