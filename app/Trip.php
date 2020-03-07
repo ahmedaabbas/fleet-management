@@ -16,7 +16,7 @@ class Trip extends Model
     }
     public function stations()
     {
-        return $this->belongsToMany(Station::class);
+        return $this->belongsToMany(Station::class)->using('App\StationTrip')->as('route')->withPivot('station_id', 'order');
     }
     public function createRoute($route)
     {
