@@ -21,8 +21,8 @@ class BusesController extends Controller
     }
     public function viewAny()
     {
-        $stations = Bus::get();
-        return $stations;
+        $buses = Bus::get();
+        return $buses;
     }
     public function view($id)
     {
