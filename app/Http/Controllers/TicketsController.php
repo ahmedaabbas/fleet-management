@@ -17,11 +17,8 @@ class TicketsController extends Controller
                 $query->where('station_trip.station_id', $station);
             });
         }
-        $array = $trips->get()->filter(function($trip) use ($departureStation, $arrivalStation) {
-            return $trip->checkRoute($departureStation, $arrivalStation);
-        });
         $seats = [];
-        foreach($array as $trip) {
+        foreach($trips->get() as $trip) {
             $newSeats = $trip->avaliableSeats($departureStation, $arrivalStation);
             $seats = array_merge($seats, json_decode($newSeats, true));
         }
