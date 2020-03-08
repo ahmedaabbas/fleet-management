@@ -8,7 +8,7 @@ use App\StationTrip;
 use App\Ticket;
 use App\Seat;
 class TicketsController extends Controller
-{
+{    
     public function lookForTickets($departureStation, $arrivalStation)
     {
         $trips = Trip::with('stations');

@@ -26,15 +26,10 @@ class Seat extends Model
     public function checkSeat($departure, $arrival, $trip)
     {
         $tickets = json_decode($this->tripTickets($trip), true);
-        $departureStation = StationTrip::where([
-            ['station_id', '=', $departure],
-            ['trip_id', '=', $trip]
-        ])->first()['order'];
-        $arrivalStation = StationTrip::where([
-            ['station_id', '=', $arrival],
-            ['trip_id', '=', $trip]
-        ])->first()['order'];
         $tripData = Trip::with('stations')->find($trip);
+        $departureStation = StationTrip::stationOrder($departure, $trip); 
+        $arrivalStation = StationTrip::stationOrder($arrival, $trip);
+
         if(!$tripData->checkRoute($departure, $arrival)) {
             return false;
         } else if(!in_array($this->id, array_map(function($ticket) {
@@ -42,19 +37,13 @@ class Seat extends Model
         }, $tickets))) {
             return true;
         } else if(array_reduce($tickets, function($bool, $ticket) use ($departureStation, $arrivalStation, $trip) {
-            $ticketDeparture = StationTrip::where([
-                ['station_id', '=', $ticket['departure_station']],
-                ['trip_id', '=', $trip]
-            ])->first()['order'];
-            $ticketArrival = StationTrip::where([
-                ['station_id', '=', $ticket['arrival_station']],
-                ['trip_id', '=', $trip]
-            ])->first()['order'];
+            $ticketDeparture = StationTrip::stationOrder($ticket['departure_station'], $trip);
+            $ticketArrival = StationTrip::stationOrder($ticket['arrival_station'], $trip);
             if(($departureStation < $ticketArrival) && ($arrivalStation > $ticketDeparture)) {
                 return false;
             } else {
                 return $bool;
-            }        }, true)) {
+            }}, true)) {
             return true;
         } else {
             return false;
