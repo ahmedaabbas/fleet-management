@@ -18,13 +18,7 @@ class TicketsController extends Controller
             });
         }
         $array = $trips->get()->filter(function($trip) use ($departureStation, $arrivalStation) {
-            $departureOrder = 0;
-            $arrivalOrder = 0;
-            foreach($trip['stations'] as $station) {
-                if($station['route']['station_id'] == $departureStation) $departureOrder = $station['route']['order'];
-                if($station['route']['station_id'] == $arrivalStation) $arrivalOrder = $station['route']['order'];
-            } 
-            return $departureOrder < $arrivalOrder;
+            return $trip->checkRoute($departureStation, $arrivalStation);
         });
         $seats = [];
         foreach($array as $trip) {
