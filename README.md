@@ -1,78 +1,48 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+## Login and Registeration
+- I used passport personal client token to authnticate users 
+- there is two use that i created in the database dump 
+- the first one is (email: admin@fleet.com password: test1234 ) and has the role of an admin
+- the second one is (email: user@fleet.com password: test1234)
+- you can register new user using the endpoint: /api/auth/register  it requires name , email, password (min: 8).
+- you can login with any user using the endpoint: /api/auth/login  ir requires email, password
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Buses
+admin can create new buses each bus has a 12 seat that will be created automatically once the bus has been created you can create a new bus using the 
+endpoint: /api/buses/create and it requires plate number with the key of numbers it can is a string and it can be letters and numbers compined.
+you can also edit an existing bus using endpoint: /api/buses/update and it requires id and numbers.
+there are two buses in the database dump with the id of 1 and 2
+## Stations
+admin can create station using endpoint: /api/stations/create and it requires a name.
+admin can also update a station using endpoint /api/stations/update which requires name and an id.
+there are seven stations in the databasedump with the names of Cairo, AlFayyum, AlMinya, Asyut, Giza, Portsaid, Damietta
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Trips
+admin can create new trips by using th endpoint: /api/trips/create which will take the input in the for of a JSON like this 
+{
+  "bus_id": 1,
+  "route": [
+    {"station_id": 7, "order": 1, "departure_date": "2020-03-10 1:26:32", "arrival_date": "2020-03-06 1:26:32"},
+    {"station_id": 6, "order": 2, "departure_date": "2020-03-10 3:26:32", "arrival_date": "2020-03-06 3:26:32"},
+    {"station_id": 2, "order": 3, "departure_date": "2020-03-10 6:26:32", "arrival_date": "2020-03-06 3:26:32"},
+    {"station_id": 5, "order": 4, "departure_date": "2020-03-10 9:26:32", "arrival_date": "2020-03-06 3:26:32"}
+  ]
+}
+the bus_id is the id of the bus doing the trip.
+as for the route it is an array of Objects each object needs a station id which is the id of the station and an order which is the order in which the bus will cross over the station 1 being the station that the trip will start from a departure date which is dateTime and an arrival date which is date time.
 
-## Learning Laravel
+a user can query the avaliable seats using the endpoint: api/tickets/departure/{departureStation}/arrival/{arrivalStation}
+departureStation is the id of the station that the user is traveling from.
+arrivalStation is the id of the station the user is traveling to.
+the query will return an array of avaliable seats for the user to choose from.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Tickets
+a user can book a Ticket using the endpoint: api/tickets/book and it requires a trip_id , seat_id, departure_station which, arrival_station.
+departure_station is the id of the station the user is traveling from.
+arrival_station is the id of the station the user is traveling to.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+booking a ticket requires the data to match the criteria meaning that if the api recicved a seat_id that is not avaliable or stations that is not withing a trip 
+route it will not book a ticket.
 
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
